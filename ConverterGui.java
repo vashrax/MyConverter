@@ -117,6 +117,7 @@ class ConverterGui extends JFrame{
 	private boolean suspended = false;
 	private Locale pl = new Locale("pl","PL");
 	private Locale en = new Locale("en","EN");
+	private int locale = 0;
 	private AnimatedIcon animatedIcon = new AnimatedIcon();
 	private TimeChanger timeChanger = new TimeChanger();
 	
@@ -160,11 +161,17 @@ class ConverterGui extends JFrame{
 		
 	ConverterGui() {
 		
+		languageComboBox = new JComboBox(languageComboBoxItems);
+		
 		if(Locale.getDefault() == Locale.UK | Locale.getDefault() == Locale.US) {
 			setTextLocalesEN();
+			locale = 1;
 		}else {
-			setTextLocalesPL();
+			setTextLocalesPL();			
+			locale = 0;
 		}
+		
+		languageComboBox.setSelectedIndex(locale);
 
 		setType(Type.UTILITY);
 		setTitle(title);
@@ -258,20 +265,20 @@ class ConverterGui extends JFrame{
 		lblLanguage.setBounds(10, 300, 100, 14);
 		panel.add(lblLanguage);
 		
-		languageComboBox = new JComboBox(languageComboBoxItems);
 		languageComboBox.setBounds(10, 325, 100, 20);
-		languageComboBox.setSelectedIndex(0);
 		languageComboBox.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				switch(languageComboBox.getSelectedIndex()) {
 				case 0:
+					locale = 0;
 					setTextLocalesPL();
 					setComponents();
-					getLocale().setDefault(pl);
+					getLocale().setDefault(pl);					
 					break;
 				case 1:
+					locale = 1;
 					setTextLocalesEN();
 					setComponents();
 					getLocale().setDefault(en);
@@ -382,7 +389,7 @@ class ConverterGui extends JFrame{
 		 * Wczytywanie danych z pliku do tabeli.
 		 */
 		
-		if(!FileOperations.loadHistory(table, filename)) {
+		if(!FileOperations.loadHistory(table, filename, locale)) {
 			JOptionPane.showMessageDialog(null, ioError_1);
 			JOptionPane.showMessageDialog(null, ioError_2);
 			enableHistory = false;
@@ -624,7 +631,7 @@ class ConverterGui extends JFrame{
 		table.setEnabled(false);
 		table.getTableHeader().setResizingAllowed(false);
 		table.getTableHeader().setReorderingAllowed(false);
-		FileOperations.loadHistory(table, filename);
+		FileOperations.loadHistory(table, filename, locale);
 		resume(animatedIcon);
 		
 		lblhistory.setText(lblHistoryText);

@@ -36,7 +36,7 @@ class FileOperations{
 	 * @param filename
 	 */
 	
-	static boolean loadHistory(JTable table, String filename) {
+	static boolean loadHistory(JTable table, String filename, int locale) {
 		boolean allRight = true;
 		try {	
 			File file = new File(filename);
@@ -46,6 +46,41 @@ class FileOperations{
 			String [] datas = new String [7];
 			DefaultTableModel model = (DefaultTableModel) table.getModel();
 			while((row = fr.readLine()) != null) {
+					switch(locale) {
+					case 0:
+						if(i==0 | i==1) {
+							if(row.equals("Pounds"))
+								row = "Funty";
+							else if(row.equals("Polish Zloty"))
+								row = "Złotówki";
+							else if(row.equals("Akres"))
+								row = "Akry";
+							else if(row.equals("Square meters"))
+								row = "Metry kwadratowe";
+							else if(row.equals("Square feets"))
+								row = "Stopy kwadratowe";
+							else if(row.equals("Kilograms"))
+								row = "Kilogramy";
+						}
+						break;
+					case 1:
+						if(i==0 | i==1) {
+						if(row.equals("Funty"))
+							row = "Pounds";
+						else if(row.equals("Złotówki"))
+							row = "Polish Zloty";
+						else if(row.equals("Akry"))
+							row = "Akres";
+						else if(row.equals("Metry kwadratowe"))
+							row = "Square meters";
+						else if(row.equals("Stopy kwadratowe"))
+							row = "Square feets";
+						else if(row.equals("Kilogramy"))
+							row = "Kilograms";
+						break;
+						}
+					default:						
+					}
 				datas[i] = row;
 				i++;
 				if (i==7) {
